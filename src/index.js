@@ -52,11 +52,20 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<RouterProvider router={router}/>);
 
 async function loader({params}) {
-    //  const users = usersData.filter(el => el.id === params.id);
-    const user = await fetch('https://jsonplaceholder.typicode.com/users') 
-        .then(res => res.json())
-        .then(users => users.filter(user => user.username === params.username))
-   
+    const response = await fetch(`https://jsonplaceholder.typicode.com/users/?username=${params.username}`);
+    const json = await response.json();
+    const user = json;
     return user[0];
 }
+
+// async function loader({params}) {
+//     //  const users = usersData.filter(el => el.id === params.id);
+//     const user = await fetch('https://jsonplaceholder.typicode.com/users') 
+//         .then(res => res.json())
+//         .then(users => users.filter(user => user.username === params.username))
+   
+//     return user[0];
+// }
+
+
 
