@@ -41,7 +41,7 @@ const router = createBrowserRouter(
             <Route path='/about' element={<About/>}/>
             <Route path='/users' element={<Users/>}/>
             <Route path='/testusers' element={<TestUsers/>}/>
-            <Route path='/testusers/:id' loader={loader} element={<TestUserPage/>} errorElement={<ErrorPage />}></Route>
+            <Route path='/testusers/:username' loader={loader} element={<TestUserPage/>} errorElement={<ErrorPage />}></Route>
             <Route path='/users/:id' loader={loader} element={<UserPage/>} errorElement={<ErrorPage />}/>
             <Route path='*' element={<ErrorPage/>}/>
         </Route>
@@ -51,10 +51,12 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<RouterProvider router={router}/>);
 
-function loader({params}) {
+async function loader({params}) {
     //  const users = usersData.filter(el => el.id === params.id);
-    const users = JSON.parse(localStorage.getItem('users')).filter((el) => el.username === params.id);
+    const user = await fetch('https://jsonplaceholder.typicode.com/users') 
+        .then(res => res.json())
+        .then(users => users.filter(user => user.username === params.username))
    
-    return users[0];
+    return user[0];
 }
 
